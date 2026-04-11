@@ -9,7 +9,7 @@ static PGconn *conn = NULL;
 
 // Neon DB connection string baked in
 static const char *connString =
-    "postgresql://neondb_owner:npg_EWHs9FS6OazR@ep-withered-queen-ajwazud6-pooler.c-3.us-east-2.aws.neon.tech/"
+    "postgresql://neondb_owner:npg_WI72rsVUkonT@ep-falling-paper-anwys5nt-pooler.c-6.us-east-1.aws.neon.tech/"
     "neondb?sslmode=require&channel_binding=require";
 
 // Internal helper to check connection
