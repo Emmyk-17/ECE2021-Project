@@ -1,3 +1,5 @@
 *.o
 reader/WiringPi~HEAD
 reader/WiringPi
+lcd_display/main
+reader/main
