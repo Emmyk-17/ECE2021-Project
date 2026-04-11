@@ -73,7 +73,11 @@ float getVoltage(void) {
     }
 
     float rms =  sqrtf(sumSq / SAMPLE_COUNT) * voltageGain;
+<<<<<<< HEAD
     rms = rms - 10;
+=======
+    rms = rms - 9;
+>>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
     if (rms < 0)
     {
         rms = 0;
@@ -95,7 +99,11 @@ float getCurrent(void) {
     }
 
     float rms =  sqrtf(sumSq / SAMPLE_COUNT) / currentSensitivity;
+<<<<<<< HEAD
     rms = rms - 0.25;
+=======
+    rms = rms - 0.16;
+>>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
     if (rms < 0)
     {
         rms = 0;
