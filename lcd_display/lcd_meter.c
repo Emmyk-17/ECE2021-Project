@@ -23,9 +23,6 @@ static char prev_line2[21] = "";
 static char prev_line3[21] = "";
 static char prev_line4[21] = "";
 
-// Energy accumulator (Wh)
-static double total_energy_wh = 0.0;
-
 // ------------------ Low Level ------------------
 
 static void lcd_write_byte(unsigned char data) {
@@ -107,7 +104,7 @@ bool lcd_init_meter() {
 void lcd_show_stats(double voltage, double current, double wattage) {
     if (lcd_file < 0) return;
 
-    char line1[21], line2[21], line3[21], line4[21];
+    char line1[21], line2[21], line3[21];
     char value_str[12];
 
     // Right-justify helper: format value to right-align within 10 chars
@@ -126,16 +123,10 @@ void lcd_show_stats(double voltage, double current, double wattage) {
     snprintf(value_str, 12, "%7.2fW", wattage);
     snprintf(line3, 21, "%-10s%10s", "Wattage :", value_str);
 
-    // Line 4: Energy in Wh
-    total_energy_wh += wattage / 3600.0;
-    snprintf(value_str, 12, "%7.3fWh", total_energy_wh);
-    snprintf(line4, 21, "%-10s%10s", "Energy  :", value_str);
-
     // Update lines
     lcd_update_line(0,line1,prev_line1);
     lcd_update_line(1,line2,prev_line2);
     lcd_update_line(2,line3,prev_line3);
-    lcd_update_line(3,line4,prev_line4);
 }
 
 // Power down
