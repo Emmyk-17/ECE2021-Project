@@ -10,10 +10,7 @@
 #include "../reading.h"
 #include "reading_list.h"
 #include <time.h>
-<<<<<<< HEAD
 #define DELAY 1000.0
-=======
->>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
 
 int main()
 {
@@ -50,11 +47,7 @@ int main()
     ReadingList* list = reading_list_create();
     Reading* average = NULL;
 
-<<<<<<< HEAD
     // Variables for delayed  averaging
-=======
-    // Variables for 500ms averaging
->>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
     struct timespec start_time, now;
     double elapsed_ms;
 
@@ -70,23 +63,14 @@ int main()
         // add data to linked list
         reading_list_add(list, voltage, current);
 
-<<<<<<< HEAD
-        // check if delay passed
-=======
-        // check if 250ms passed
->>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
+        // check if delay passsed
         clock_gettime(CLOCK_MONOTONIC, &now);
         elapsed_ms = (now.tv_sec - start_time.tv_sec) * 1000.0
                    + (now.tv_nsec - start_time.tv_nsec) / 1000000.0;
 
-<<<<<<< HEAD
         // average linked list after delay 
         if (elapsed_ms >= DELAY) {
-=======
-        // average linked list after 500ms 
-        if (elapsed_ms >= 500.0) {
->>>>>>> dd4b5c7ec49655ad7f32258ad4a4acbaaf1972f3
-            average = reading_list_average_and_clear(list);
+	    average = reading_list_average_and_clear(list);
 
             // save averaged reading to database 
             if (average) {
