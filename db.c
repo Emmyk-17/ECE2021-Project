@@ -82,6 +82,56 @@ bool db_insert_reading(const Reading* reading) {
     return true;
 }
 
+// Insert alert into database (SAFE + TIMESTAMPED)
+void db_insert_alert(const char *message) {
+    if (!check_conn() || !message) return;
+
+    // ---- TIMESTAMP (UTC, same format as readings) ----
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    struct tm tm_now;
+    gmtime_r(&ts.tv_sec, &tm_now);
+
+    char timestamp_sec[32];
+    strftime(timestamp_sec, sizeof(timestamp_sec),
+             "%Y-%m-%d %H:%M:%S", &tm_now);
+
+    int millis = ts.tv_nsec / 1000000;
+
+    char timestamp_str[64];
+    snprintf(timestamp_str, sizeof(timestamp_str),
+             "%s.%03d+0000", timestamp_sec, millis);
+
+    // ---- ESCAPE MESSAGE (prevents SQL injection / broken queries) ----
+    char escaped_msg[1024];
+    PQescapeStringConn(conn,
+                       escaped_msg,
+                       message,
+                       strlen(message),
+                       NULL);
+
+    // ---- BUILD QUERY ----
+    char query[1400];
+
+    snprintf(query, sizeof(query),
+             "INSERT INTO public.alerts (description, time_stamp) "
+             "VALUES ('%s', '%s');",
+             escaped_msg,
+             timestamp_str);
+
+    PGresult *res = PQexec(conn, query);
+
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        fprintf(stderr, "Alert insert failed: %s\nQuery: %s\n",
+                PQerrorMessage(conn), query);
+        PQclear(res);
+        return;
+    }
+
+    PQclear(res);
+}
+
 // Get the latest reading from the database
 Reading* db_get_latest_reading(void) {
     if (!check_conn()) return NULL;
@@ -101,7 +151,7 @@ Reading* db_get_latest_reading(void) {
 
     if (PQntuples(res) == 0) {
         PQclear(res);
-        return NULL; // no rows
+        return NULL;
     }
 
     double voltage = atof(PQgetvalue(res, 0, 0));
