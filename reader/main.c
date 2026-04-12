@@ -155,7 +155,7 @@ int main()
                         db_insert_alert(msg);
                         clock_gettime(CLOCK_MONOTONIC, &last_alert_time);
                     }
-                    else if (avg_current > 10.0)
+                    else if (avg_current > 15.0)
                     {
                         char msg[128];
                         snprintf(msg, sizeof(msg),
