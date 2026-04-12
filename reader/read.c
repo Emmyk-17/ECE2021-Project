@@ -73,7 +73,7 @@ float getVoltage(void) {
     }
 
     float rms =  sqrtf(sumSq / SAMPLE_COUNT) * voltageGain;
-    rms = rms - 10;
+    rms = rms - 11.9;
     if (rms < 0)
     {
         rms = 0;
