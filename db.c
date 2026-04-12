@@ -55,12 +55,21 @@ bool db_insert_reading(const Reading* reading) {
     char timestamp_str[64];
     snprintf(timestamp_str, sizeof(timestamp_str), "%s.%03d+0000", timestamp_sec, millis);
 
+    // ---- NEW CALCULATIONS ----
+    double power = reading->voltage * reading->current;
+    double total_energy = power / 3600.0;
+    // --------------------------
+
     // Build query
-    char query[256];
+    char query[512];
     snprintf(query, sizeof(query),
-             "INSERT INTO public.readings (timestamp, voltage, current) "
-             "VALUES ('%s', %f, %f);",
-             timestamp_str, reading->voltage, reading->current);
+             "INSERT INTO public.readings (timestamp, voltage, current, power, total_energy) "
+             "VALUES ('%s', %f, %f, %f, %f);",
+             timestamp_str,
+             reading->voltage,
+             reading->current,
+             power,
+             total_energy);
 
     PGresult *res = PQexec(conn, query);
     if (PQresultStatus(res) != PGRES_COMMAND_OK) {
@@ -68,6 +77,7 @@ bool db_insert_reading(const Reading* reading) {
         PQclear(res);
         return false;
     }
+
     PQclear(res);
     return true;
 }
