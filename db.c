@@ -58,7 +58,7 @@ bool db_insert_reading(const Reading* reading) {
     // Build query
     char query[256];
     snprintf(query, sizeof(query),
-             "INSERT INTO public.raw_readings (timestamp, voltage, current) "
+             "INSERT INTO public.readings (timestamp, voltage, current) "
              "VALUES ('%s', %f, %f);",
              timestamp_str, reading->voltage, reading->current);
 
