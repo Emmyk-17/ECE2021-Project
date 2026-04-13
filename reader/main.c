@@ -146,7 +146,7 @@ int main()
                         db_insert_alert(msg);
                         clock_gettime(CLOCK_MONOTONIC, &last_alert_time);
                     }
-                    else if (avg_voltage > 260.0 || avg_voltage < 180.0)
+                    else if (avg_voltage > 260.0)
                     {
                         char msg[128];
                         snprintf(msg, sizeof(msg),
